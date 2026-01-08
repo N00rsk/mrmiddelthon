@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MrMiddelthon | Offisiell Nettside</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --twitch-purple: #9146ff;
+            --discord-blue: #5865F2;
+            --tip-green: #31d39d;
+            --tiktok-black: #010101;
+            --tiktok-red: #ff0050;
+            --tiktok-cyan: #00f2ea;
+            --dark-bg: #0e0e10;
+            --glass: rgba(255, 255, 255, 0.05);
+        }
+
+        * { box-sizing: border-box; }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--dark-bg);
+            color: white;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .bg-gradient {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at top right, #1a1a2e, #0e0e10);
+            z-index: -1;
+        }
+
+        header { text-align: center; padding: 40px 20px; }
+        .logo {
+            font-size: clamp(2.5rem, 8vw, 4.5rem);
+            font-weight: 900;
+            margin: 0;
+            background: linear-gradient(45deg, var(--twitch-purple), var(--tiktok-cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-transform: uppercase;
+            filter: drop-shadow(0 0 15px rgba(145, 70, 255, 0.3));
+        }
+
+        .main-content { flex: 1; width: 95%; max-width: 1400px; margin: 0 auto; }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: 3fr 1fr;
+            gap: 15px;
+            background: var(--glass);
+            padding: 15px;
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .video-box { position: relative; width: 100%; aspect-ratio: 16 / 9; }
+        .chat-box { width: 100%; height: 100%; min-height: 450px; }
+        iframe { width: 100%; height: 100%; border-radius: 12px; border: none; }
+
+        /* Knapperad */
+        .button-row {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 40px 0 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            text-decoration: none;
+            color: white;
+            padding: 16px 30px;
+            border-radius: 12px;
+            font-weight: 700;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            align-items: center;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+        }
+
+        .btn:hover { transform: scale(1.05); filter: brightness(1.2); }
+
+        /* Pulserende Følg-knapp */
+        .btn-follow { 
+            background: var(--twitch-purple); 
+            animation: pulse 2s infinite;
+            box-shadow: 0 0 20px rgba(145, 70, 255, 0.6);
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); box-shadow: 0 0 30px rgba(145, 70, 255, 0.8); }
+            100% { transform: scale(1); }
+        }
+
+        .btn-discord { background: var(--discord-blue); }
+        .btn-tip { background: var(--tip-green); color: #000; }
+        .btn-tiktok { 
+            background: var(--tiktok-black); 
+            border: 2px solid var(--tiktok-cyan);
+            box-shadow: 3px 3px 0px var(--tiktok-red), -3px -3px 0px var(--tiktok-cyan);
+        }
+
+        /* Exclusive Seksjon */
+        .exclusive-section {
+            text-align: center;
+            margin: 50px 0;
+            padding: 40px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .btn-exclusive {
+            background: linear-gradient(45deg, #ff416c, #ff4b2b);
+            padding: 25px 60px;
+            font-size: 1.5rem;
+            border-radius: 50px;
+            display: inline-block;
+            cursor: pointer;
+            border: none;
+            color: white;
+            font-weight: 900;
+            text-transform: uppercase;
+            box-shadow: 0 10px 40px rgba(255, 65, 108, 0.4);
+            transition: 0.3s;
+        }
+
+        .btn-exclusive:hover {
+            letter-spacing: 2px;
+            box-shadow: 0 0 50px rgba(255, 65, 108, 0.8);
+        }
+
+        /* Modal (Pop-up) */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.95);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .modal-content {
+            max-width: 600px;
+            background: #1a1a1a;
+            padding: 50px;
+            border-radius: 30px;
+            border: 2px solid var(--tiktok-red);
+        }
+
+        .modal-content h2 { color: var(--tiktok-red); font-size: 2rem; }
+        .modal-content p { font-size: 1.2rem; line-height: 1.6; margin: 20px 0; }
+        .close-btn {
+            background: white; color: black; padding: 10px 20px; 
+            border-radius: 10px; cursor: pointer; font-weight: bold;
+        }
+
+        @media (max-width: 900px) {
+            .grid-container { grid-template-columns: 1fr; }
+            .btn { width: 100%; justify-content: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-gradient"></div>
+
+    <header>
+        <h1 class="logo">MrMiddelthon</h1>
+    </header>
+
+    <main class="main-content">
+        <div class="grid-container">
+            <div class="video-box">
+                <iframe src="https://player.twitch.tv/?channel=mrmiddelthon&parent=n00rsk.github.io&autoplay=false" allowfullscreen="true"></iframe>
+            </div>
+            <div class="chat-box">
+                <iframe src="https://www.twitch.tv/embed/mrmiddelthon/chat?parent=n00rsk.github.io" height="100%" width="100%"></iframe>
+            </div>
+        </div>
+
+        <div class="button-row">
+            <a href="https://www.twitch.tv/mrmiddelthon" target="_blank" class="btn btn-follow">FØLG PÅ TWITCH</a>
+            <a href="https://www.tiktok.com/@mrmiddelthon" target="_blank" class="btn btn-tiktok">TikTok</a>
+            <a href="https://discord.com/invite/9scDaCkMX8" target="_blank" class="btn btn-discord">Discord</a>
+            <a href="https://streamlabs.com/mrmiddelthon/tip" target="_blank" class="btn btn-tip">Doner</a>
+        </div>
+
+        <div class="exclusive-section">
+            <p style="color: #666; margin-bottom: 15px;">Kun for de mest lojale...</p>
+            <button class="btn-exclusive" onclick="openModal()">Exclusive Content</button>
+        </div>
+    </main>
+
+    <div id="msgModal" class="modal">
+        <div class="modal-content">
+            <h2>KUDD UD!</h2>
+            <p>Her har du ingenting å gjøre... Slutt å leit etter lettkledde bilder av meg og heller følg meg!</p>
+            <div class="close-btn" onclick="closeModal()">Gå tilbake i skam</div>
+        </div>
+    </div>
+
+    <footer>
+        &copy; 2026 MrMiddelthon | n00rsk.github.io
+    </footer>
+
+    <script>
+        function openModal() { document.getElementById('msgModal').style.display = 'flex'; }
+        function closeModal() { document.getElementById('msgModal').style.display = 'none'; }
+        
+        // Lukk modal hvis man klikker utenfor boksen
+        window.onclick = function(event) {
+            let modal = document.getElementById('msgModal');
+            if (event.target == modal) { modal.style.display = "none"; }
+        }
+    </script>
+
+</body>
+</html>
